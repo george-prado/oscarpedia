@@ -1,0 +1,40 @@
+﻿@page "/api-caller"
+@inject HttpClient Http
+
+<PageTitle>Oscarpedia</PageTitle>
+<h1>Integração com API</h1>
+
+<p>Explicação do que é a API</p>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Pesquisar filmes" @bind="searchTerm" />
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" @onclick="SearchMovies">Pesquisar</button>
+    </div>
+</div>
+}
+
+@code {
+    private List<Movie> movies;
+    private string searchTerm = "";
+
+    private async Task SearchMovies()
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            movies = await httpClient.GetFromJsonAsync<List<Movie>>($"api/movies/search?term={searchTerm}"); // Substitua com sua rota de pesquisa de API correta
+        }
+        else
+        {
+            movies = null;
+        }
+    }
+
+    // Classe de exemplo para representar um filme (você deve criar uma classe adequada)
+    private class Movie
+    {
+        public string Title { get; set; }
+        public int ReleaseYear { get; set; }
+        // Outras propriedades aqui
+    }
+}
